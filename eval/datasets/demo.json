@@ -1,0 +1,23 @@
+{
+  "name": "tinyshop-synthetic-localization-v1",
+  "kind": "synthetic-demo",
+  "provenance": "Author-created edge-case exercises. Not public GitHub Issues. No claim of held-out generalization.",
+  "source": "demo",
+  "ref": "HEAD",
+  "cases": [
+    {"id":"demo-01","split":"dev","question":"calculate_total 在 quantity=0 时仍然收取一件商品的价格，为什么？","files":["cart.py"],"symbols":["calculate_total"]},
+    {"id":"demo-02","split":"test","question":"apply_discount 输入 percent=20 时出现负数，而需求是打八折。","files":["cart.py"],"symbols":["apply_discount"]},
+    {"id":"demo-03","split":"test","question":"订单金额刚好等于免邮门槛时没有免邮，检查 free_shipping 边界。","files":["cart.py"],"symbols":["free_shipping"]},
+    {"id":"demo-04","split":"test","question":"合并购物车后同一商品的旧数量消失，merge_carts 哪里有问题？","files":["cart.py"],"symbols":["merge_carts"]},
+    {"id":"demo-05","split":"dev","question":"paginate 在 page_size=0 时发生 ZeroDivisionError，请定位。","files":["pagination.py"],"symbols":["paginate"]},
+    {"id":"demo-06","split":"test","question":"分页 page=1 时跳过了第一页的数据，paginate 计算起始位置是否正确？","files":["pagination.py"],"symbols":["paginate"]},
+    {"id":"demo-07","split":"test","question":"next_cursor 处理空列表时触发 IndexError。","files":["pagination.py"],"symbols":["next_cursor"]},
+    {"id":"demo-08","split":"test","question":"parse_bool 将字符串 false 解析成 True，问题出在哪里？","files":["config.py"],"symbols":["parse_bool"]},
+    {"id":"demo-09","split":"test","question":"build_url 的 base 尾部有斜杠时，结果出现重复斜杠。","files":["config.py"],"symbols":["build_url"]},
+    {"id":"demo-10","split":"test","question":"load_timeout 读取 TIMEOUT=0.5 时产生 ValueError。","files":["config.py"],"symbols":["load_timeout"]},
+    {"id":"demo-11","split":"test","question":"Cache.clear 在存在多个键时抛出 dictionary changed size during iteration。","files":["cache.py"],"symbols":["Cache.clear"]},
+    {"id":"demo-12","split":"test","question":"find_user 查询不存在的邮箱时抛出 StopIteration。","files":["users.py"],"symbols":["find_user"]},
+    {"id":"demo-13","split":"test","question":"多次调用 add_role 且省略 roles，之前的角色残留到下一个用户。","files":["users.py"],"symbols":["add_role"]},
+    {"id":"demo-14","split":"test","question":"display_name 已有 nickname 但缺少 name 字段时仍然出现 KeyError。","files":["users.py"],"symbols":["display_name"]}
+  ]
+}

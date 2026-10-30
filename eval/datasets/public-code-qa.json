@@ -1,0 +1,820 @@
+{
+  "name": "public-python-code-localization-v1",
+  "version": "1.0.0",
+  "kind": "public-code-qa",
+  "created_date": "2026-10-28",
+  "provenance": "Author-constructed code-localization questions, drafted with AI assistance and individually checked against imported fixed-version source, AST definitions and indexed symbols. These are code-understanding questions, not public GitHub Issues, reproduced defects, patches or repair-success evaluations. There was no independent human adjudication or inter-annotator study. All repositories also appear in dev, so test results do not establish repository-level generalization; source-aware question construction and model pretraining contamination may bias results.",
+  "question_language": "zh-CN with original API and parameter terminology",
+  "split_policy": "Two development and eight test questions per repository. Dev includes one symbol-guided and one behavioral question per repository. Question-level split only; no held-out repositories or module-disjoint guarantee.",
+  "protocol": "docs/public-eval-protocol.md",
+  "repositories": [
+    {
+      "source": "https://github.com/psf/requests",
+      "release": "v2.32.5",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741"
+    },
+    {
+      "source": "https://github.com/pallets/flask",
+      "release": "3.1.2",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a"
+    },
+    {
+      "source": "https://github.com/pallets/click",
+      "release": "8.2.1",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098"
+    }
+  ],
+  "cases": [
+    {
+      "id": "requests-01",
+      "split": "dev",
+      "question": "PreparedRequest.prepare_url 收到 bytes 类型 URL 时如何解码？对没有协议的 example.com 和以星号开头的 HTTP 主机名，分别在哪里拒绝？",
+      "files": [
+        "src/requests/models.py"
+      ],
+      "symbols": [
+        "PreparedRequest.prepare_url"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "URL 准备逻辑先将 bytes 按 UTF-8 解码，再去除前导空白；缺少 scheme 时抛 MissingSchema，ASCII hostname 以 * 或 . 开头时抛 InvalidURL。只问源码控制流，不声称这是库缺陷。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_url",
+          "start_line": 409,
+          "end_line": 481
+        }
+      ]
+    },
+    {
+      "id": "requests-02",
+      "split": "test",
+      "question": "Response.json 在未设置编码时怎样尝试识别 UTF 编码？UTF 解码失败和 JSON 语法错误为何走不同路径，最终暴露哪一种 JSON 异常？",
+      "files": [
+        "src/requests/models.py"
+      ],
+      "symbols": [
+        "Response.json"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "满足无 encoding、存在 content 且长度大于 3 时调用 guess_json_utf；UnicodeDecodeError 后回退 self.text，JSONDecodeError 则转换成 RequestsJSONDecodeError。回退文本解析的语法错误也使用同一异常包装。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/models.py",
+          "symbol": "Response.json",
+          "start_line": 947,
+          "end_line": 980
+        }
+      ]
+    },
+    {
+      "id": "requests-03",
+      "split": "dev",
+      "question": "同一个会话已有 cookies 和默认 headers，单次请求又提供自己的 cookies 与 headers；真正发送前它们在哪里合并，并怎样传给准备好的请求对象？",
+      "files": [
+        "src/requests/sessions.py"
+      ],
+      "symbols": [
+        "Session.prepare_request"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "先将普通 cookie 字典转 CookieJar，再向新的 RequestsCookieJar 依次合并会话及请求 cookie；headers 使用 merge_setting，并把这些值传给 PreparedRequest.prepare。该标注定位合并入口，不要求穷尽 cookie 重名及 domain/path 的所有规则。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.prepare_request",
+          "start_line": 457,
+          "end_line": 498
+        }
+      ]
+    },
+    {
+      "id": "requests-04",
+      "split": "test",
+      "question": "上传时把一个可迭代的流式对象作为 data，又同时传入 files，为什么会被明确拒绝？请定位对流式请求体的判定和触发互斥异常的分支。",
+      "files": [
+        "src/requests/models.py"
+      ],
+      "symbols": [
+        "PreparedRequest.prepare_body"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "is_stream 要求 data 有 __iter__ 且不是字符串、list、tuple 或 Mapping；进入该分支后若 files 为真，抛出 NotImplementedError，说明 streamed bodies 与 files 互斥。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_body",
+          "start_line": 494,
+          "end_line": 570
+        }
+      ]
+    },
+    {
+      "id": "requests-05",
+      "split": "test",
+      "question": "没有提供请求体时，为什么 POST 会自动出现 Content-Length: 0，而 GET、HEAD 不走这个自动补零分支？已有这个请求头又会怎样处理？",
+      "files": [
+        "src/requests/models.py"
+      ],
+      "symbols": [
+        "PreparedRequest.prepare_content_length"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "body is None 的 elif 分支同时检查 method 不在 GET/HEAD 且 Content-Length 尚未设置；只有满足全部条件才写入字符串 0。已有头值不会被此分支覆盖。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/models.py",
+          "symbol": "PreparedRequest.prepare_content_length",
+          "start_line": 572,
+          "end_line": 586
+        }
+      ]
+    },
+    {
+      "id": "requests-06",
+      "split": "test",
+      "question": "一个带请求体的 POST 自动跟随重定向：收到 302 时为何变成 GET 并清空请求体相关头，而 307、308 会保留请求体？请找出方法改写与清理请求体两处协作逻辑。",
+      "files": [
+        "src/requests/sessions.py"
+      ],
+      "symbols": [
+        "SessionRedirectMixin.rebuild_method",
+        "SessionRedirectMixin.resolve_redirects"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "重定向循环先调用 rebuild_method；302 对非 HEAD 请求改 GET。之后对非 temporary_redirect/permanent_redirect 响应删除 Content-Length、Content-Type、Transfer-Encoding 并令 body=None。307/308 跳过清理；标注是两个独立方法，不能只凭一个头删除片段解释全部行为。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_method",
+          "start_line": 333,
+          "end_line": 353
+        },
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.resolve_redirects",
+          "start_line": 159,
+          "end_line": 280
+        }
+      ]
+    },
+    {
+      "id": "requests-07",
+      "split": "test",
+      "question": "跟随重定向时，原请求的 Authorization 为什么可能被删除？跨主机跳转与同一主机从默认 HTTP 端口升级到默认 HTTPS 端口，判定为何不同？",
+      "files": [
+        "src/requests/sessions.py"
+      ],
+      "symbols": [
+        "SessionRedirectMixin.rebuild_auth",
+        "SessionRedirectMixin.should_strip_auth"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "rebuild_auth 依据 should_strip_auth 决定删除已有 Authorization。后者先判断 hostname 改变，再为同主机、默认端口 HTTP→HTTPS 放行；还分别处理默认端口等价情况。删除旧头后仍可能按 trust_env 从新地址的 netrc 重新准备认证，故不能声称最终请求必然没有认证。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.rebuild_auth",
+          "start_line": 282,
+          "end_line": 300
+        },
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "SessionRedirectMixin.should_strip_auth",
+          "start_line": 127,
+          "end_line": 157
+        }
+      ]
+    },
+    {
+      "id": "requests-08",
+      "split": "test",
+      "question": "按块读取响应内容时，底层 urllib3 的 ProtocolError、DecodeError、ReadTimeoutError 为什么不会直接原样抛出？定位这几类错误被转换成库自身异常的位置。",
+      "files": [
+        "src/requests/models.py"
+      ],
+      "symbols": [
+        "Response.iter_content"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "内部 generate 调用 raw.stream(decode_content=True)；依次把 ProtocolError 转 ChunkedEncodingError、DecodeError 转 ContentDecodingError、ReadTimeoutError 转 ConnectionError。该题特指响应迭代路径，不混同适配器发送阶段的 ReadTimeout 转换。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/models.py",
+          "symbol": "Response.iter_content",
+          "start_line": 799,
+          "end_line": 855
+        }
+      ]
+    },
+    {
+      "id": "requests-09",
+      "split": "test",
+      "question": "HTTPAdapter.send 的 timeout 如果是三元素元组，会在哪里产生 ValueError？正常的二元素元组和单个浮点数又怎样被转换成连接、读取超时配置？",
+      "files": [
+        "src/requests/adapters.py"
+      ],
+      "symbols": [
+        "HTTPAdapter.send"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "在发起 conn.urlopen 前，tuple 分支执行 connect,read=timeout；解包 ValueError 被包装为明确的 Invalid timeout 提示。二元组分别构造 TimeoutSauce 的 connect/read，其他标量同时用于两项。连接对象准备与证书配置在此检查之前已执行，故不声称该检查是整个发送方法的第一个动作。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/adapters.py",
+          "symbol": "HTTPAdapter.send",
+          "start_line": 590,
+          "end_line": 696
+        }
+      ]
+    },
+    {
+      "id": "requests-10",
+      "split": "test",
+      "question": "启用 trust_env 后，环境代理为什么不会覆盖单次请求已经指定的同名代理？REQUESTS_CA_BUNDLE 与 CURL_CA_BUNDLE 在什么 verify 条件下才会参与证书配置？",
+      "files": [
+        "src/requests/sessions.py"
+      ],
+      "symbols": [
+        "Session.merge_environment_settings"
+      ],
+      "source": "https://github.com/psf/requests",
+      "ref": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "trust_env 分支把环境代理通过 proxies.setdefault 写入，因此已有键不被覆盖；verify 为 True 或 None 时，依次取 REQUESTS_CA_BUNDLE、CURL_CA_BUNDLE、原值，随后与会话配置合并。verify=False 或已指定证书路径不会触发这一环境证书替换。",
+      "gold_evidence": [
+        {
+          "path": "src/requests/sessions.py",
+          "symbol": "Session.merge_environment_settings",
+          "start_line": 750,
+          "end_line": 779
+        }
+      ]
+    },
+    {
+      "id": "flask-01",
+      "split": "dev",
+      "question": "Flask.make_response 如何区分视图返回的 (body, status) 与 (body, headers)？返回 None 或错误长度的元组，分别在哪里被拒绝？",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.make_response"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "二元组第二项为 Headers/dict/tuple/list 时作为 headers，否则作为 status；三元组直接解包，其余长度抛 TypeError。解包后 body 为 None 另有明确 TypeError。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.make_response",
+          "start_line": 1129,
+          "end_line": 1269
+        }
+      ]
+    },
+    {
+      "id": "flask-02",
+      "split": "test",
+      "question": "RequestContext.push 为什么先准备应用上下文和 session，再匹配 URL？同一个请求上下文再次入栈时，什么条件防止重新打开 session？",
+      "files": [
+        "src/flask/ctx.py"
+      ],
+      "symbols": [
+        "RequestContext.push"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "若没有当前 app context 或 app 不匹配则新建并 push；设置 request ContextVar 后，仅在 self.session is None 时 open_session，必要时生成 null session；最后调用 match_request，使自定义 URL converter 可访问 session。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/ctx.py",
+          "symbol": "RequestContext.push",
+          "start_line": 367,
+          "end_line": 394
+        }
+      ]
+    },
+    {
+      "id": "flask-03",
+      "split": "dev",
+      "question": "注册的 before_request 回调直接返回一个响应后，为什么真正的视图函数没有执行，但请求仍会进入响应收尾？请定位回调短路与主调度对返回值的判断。",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.preprocess_request",
+        "Flask.full_dispatch_request"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "preprocess_request 遇到 before_func 的非 None 返回即返回；full_dispatch_request 仅在该结果为 None 时 dispatch_request，并在 try/except 后统一 finalize_request。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.preprocess_request",
+          "start_line": 1271,
+          "end_line": 1296
+        },
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.full_dispatch_request",
+          "start_line": 904,
+          "end_line": 920
+        }
+      ]
+    },
+    {
+      "id": "flask-04",
+      "split": "test",
+      "question": "生成链接时同时指定 _scheme='https' 和 _external=False，为什么会被拒绝？有活动请求和没有活动请求时，外部链接默认值又是在哪里决定的？",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.url_for"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "存在 request context 时，_external 未指定则取 _scheme is not None；没有请求时默认 True，并要求可用 url_adapter。随后显式检查 _scheme 不为 None 且 _external 为假，抛 ValueError，发生在 adapter.build 之前。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.url_for",
+          "start_line": 1003,
+          "end_line": 1127
+        }
+      ]
+    },
+    {
+      "id": "flask-05",
+      "split": "test",
+      "question": "未配置 PROPAGATE_EXCEPTIONS 时，为什么测试或调试模式中的未处理异常会继续抛出，而普通运行模式会包装成带原始异常的 500 响应？定位配置回退和异常包装的分支。",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.handle_exception"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "配置值为 None 时 propagate=self.testing or self.debug；真值重新 raise，否则记录异常并构造 InternalServerError(original_exception=e)，查找500处理器后 finalize_request。题目讨论未处理异常入口，不把它等同于所有用户异常的第一处理点。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.handle_exception",
+          "start_line": 811,
+          "end_line": 862
+        }
+      ]
+    },
+    {
+      "id": "flask-06",
+      "split": "test",
+      "question": "Flask.handle_user_exception 遇到 BadRequestKeyError 时何时会开启 show_exception？普通 HTTPException 又在什么条件下走 HTTP 异常处理，而不是继续找用户异常处理器？",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.handle_user_exception"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "BadRequestKeyError 且 debug 或 TRAP_BAD_REQUEST_ERRORS 为真时设置 e.show_exception。HTTPException 且未被 trap_http_exception 捕获时直接交给 handle_http_exception；其他情况查找用户处理器，找不到则重新抛出。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.handle_user_exception",
+          "start_line": 779,
+          "end_line": 809
+        }
+      ]
+    },
+    {
+      "id": "flask-07",
+      "split": "test",
+      "question": "同一应用注册多个 after_request 处理器，为什么后注册的通常先执行？请求临时回调、蓝图回调和 session 保存，在响应发送前按怎样的源码顺序处理？",
+      "files": [
+        "src/flask/app.py"
+      ],
+      "symbols": [
+        "Flask.process_response"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "先顺序执行 ctx._after_request_functions，再按 request.blueprints 加应用作用域的顺序遍历 after_request_funcs，各作用域内部 reversed；最后仅非 null session 调用 save_session。并非所有类型回调都采用反向注册顺序。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/app.py",
+          "symbol": "Flask.process_response",
+          "start_line": 1298,
+          "end_line": 1324
+        }
+      ]
+    },
+    {
+      "id": "flask-08",
+      "split": "test",
+      "question": "浏览器提交一个签名无效的会话 cookie 时，为什么通常得到新的空会话，而不是直接让请求抛出签名异常？定位读取 cookie 与捕获错误的实现。",
+      "files": [
+        "src/flask/sessions.py"
+      ],
+      "symbols": [
+        "SecureCookieSessionInterface.open_session"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "存在签名序列化器时读取配置的 cookie；s.loads 使用 permanent_session_lifetime 的秒数作为 max_age，遇到 BadSignature 则返回 self.session_class()。缺少序列化器时返回 None 是另一条分支。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/sessions.py",
+          "symbol": "SecureCookieSessionInterface.open_session",
+          "start_line": 337,
+          "end_line": 349
+        }
+      ]
+    },
+    {
+      "id": "flask-09",
+      "split": "test",
+      "question": "应用没有设置 secret_key 时，为什么仍能创建请求上下文，但写入 session 会报会话不可用？请串起签名器缺失、空会话占位和写操作拒绝这条路径。",
+      "files": [
+        "src/flask/sessions.py",
+        "src/flask/ctx.py"
+      ],
+      "symbols": [
+        "SecureCookieSessionInterface.get_signing_serializer",
+        "SecureCookieSessionInterface.open_session",
+        "RequestContext.push",
+        "NullSession._fail"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "get_signing_serializer 在无 app.secret_key 时返回 None，open_session 随之返回 None；RequestContext.push 改为 make_null_session。NullSession 将写入类操作绑定到 _fail，明确提示未设置 secret key。这是缺少配置的正常保护行为。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/sessions.py",
+          "symbol": "SecureCookieSessionInterface.get_signing_serializer",
+          "start_line": 317,
+          "end_line": 335
+        },
+        {
+          "path": "src/flask/sessions.py",
+          "symbol": "SecureCookieSessionInterface.open_session",
+          "start_line": 337,
+          "end_line": 349
+        },
+        {
+          "path": "src/flask/sessions.py",
+          "symbol": "NullSession._fail",
+          "start_line": 103,
+          "end_line": 108
+        },
+        {
+          "path": "src/flask/ctx.py",
+          "symbol": "RequestContext.push",
+          "start_line": 367,
+          "end_line": 394
+        }
+      ]
+    },
+    {
+      "id": "flask-10",
+      "split": "test",
+      "question": "RequestContext.pop 在最外层请求退出时怎样执行 teardown、关闭请求并重置 ContextVar？即使 teardown 阶段异常，哪些上下文清理操作仍被 finally 保护？",
+      "files": [
+        "src/flask/ctx.py"
+      ],
+      "symbols": [
+        "RequestContext.pop"
+      ],
+      "source": "https://github.com/pallets/flask",
+      "ref": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "len(_cv_tokens)==1 时执行 do_teardown_request 与可选 request.close；finally 中弹出token、重置 _cv_request、清理 environ 引用并 pop 自动应用上下文。request.close 本身不在 finally 内，因此不能声称 teardown 抛错后一定仍执行 close。",
+      "gold_evidence": [
+        {
+          "path": "src/flask/ctx.py",
+          "symbol": "RequestContext.pop",
+          "start_line": 396,
+          "end_line": 431
+        }
+      ]
+    },
+    {
+      "id": "click-01",
+      "split": "dev",
+      "question": "Parameter.consume_value 中，命令行、环境变量、default_map 和参数默认值的优先级如何确定？一个来源已经给出非 None 值时，为何不会再被后面的默认来源覆盖？",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Parameter.consume_value"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "先读取 opts，再依次在 value is None 时调用 value_from_envvar、ctx.lookup_default、get_default，并同步记录 ParameterSource。False、0、空字符串不等同于 None，不会仅因是假值而触发这些回退。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Parameter.consume_value",
+          "start_line": 2268,
+          "end_line": 2286
+        }
+      ]
+    },
+    {
+      "id": "click-02",
+      "split": "test",
+      "question": "Command.main 的 standalone_mode=False 为什么能把正常回调返回值交还调用者，并让 ClickException 继续抛出？显式 Exit 与 Abort 在这个模式下分别怎样处理？",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Command.main"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "调用 invoke 后非 standalone 直接返回 rv；捕获 ClickException 时非 standalone 重新 raise；Exit 分支在非 standalone 返回 exit_code，Abort 分支则重新 raise，而不是输出 Aborted 并 sys.exit。目标为实际实现，非同名 typing.overload 声明。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Command.main",
+          "start_line": 1295,
+          "end_line": 1406
+        }
+      ]
+    },
+    {
+      "id": "click-03",
+      "split": "dev",
+      "question": "命令组允许不带子命令运行时，chain=True 与普通组传给 result_callback 的值为何不同？有多个串联子命令时，回调收到的结果列表在哪里汇总？",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Group.invoke"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "无 protected args 且 invoke_without_command 时执行组回调，普通组把 rv 交给 _process_result，chain 组传空列表。有子命令的 chain 分支先建立 contexts，再逐个 invoke 并 append 到 rv，最后统一 _process_result。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Group.invoke",
+          "start_line": 1796,
+          "end_line": 1862
+        }
+      ]
+    },
+    {
+      "id": "click-04",
+      "split": "test",
+      "question": "把当前上下文的参数转交另一个命令时，为何显式提供的关键字参数不会被当前参数覆盖？目标命令缺失的默认值又在哪里补齐并进行类型转换？请定位这两层调用。",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Context.forward",
+        "Context.invoke"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "forward 只在 param 不在 kwargs 时填入 self.params，然后调用 invoke。invoke 收到 Command 时创建子context，对 expose_value 且不在 kwargs 中的参数调用 type_cast_value(ctx,param.get_default(ctx))，并跟踪 ctx.params。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Context.forward",
+          "start_line": 796,
+          "end_line": 813
+        },
+        {
+          "path": "src/click/core.py",
+          "symbol": "Context.invoke",
+          "start_line": 748,
+          "end_line": 794
+        }
+      ]
+    },
+    {
+      "id": "click-05",
+      "split": "test",
+      "question": "选项启用了 prompt 后，为什么环境变量或 default_map 已经提供值时通常不再提问，而只剩参数默认值时仍可能交互提问？resilient_parsing 又怎样阻止提示？",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Option.consume_value",
+        "Parameter.consume_value"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "Option 先从父方法获得 value/source；常规 prompt 分支要求 source 为 None 或 DEFAULT、prompt非None、required或prompt_required为真，且不是 resilient_parsing。ENVIRONMENT/DEFAULT_MAP 不满足来源条件；另有 _flag_needs_value 的单独提示分支，不与常规分支混淆。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Option.consume_value",
+          "start_line": 2998,
+          "end_line": 3033
+        },
+        {
+          "path": "src/click/core.py",
+          "symbol": "Parameter.consume_value",
+          "start_line": 2268,
+          "end_line": 2286
+        }
+      ]
+    },
+    {
+      "id": "click-06",
+      "split": "test",
+      "question": "普通非复合类型的参数固定 nargs=2，手工传入单元素序列时，为什么会报取值数量不符？multiple=True 时，这一数量检查是在整体序列还是每组值上进行，最后返回什么结构？",
+      "files": [
+        "src/click/core.py"
+      ],
+      "symbols": [
+        "Parameter.type_cast_value"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "nargs>1 且非 composite type 的 convert 先转tuple并检查 len(value)==self.nargs，否则 BadParameter；multiple 分支对外层每个元素调用 convert 后形成tuple，因此普通非复合类型的两值多次参数得到tuple of tuples。题目不把该路径扩展到自带 is_composite 的类型。",
+      "gold_evidence": [
+        {
+          "path": "src/click/core.py",
+          "symbol": "Parameter.type_cast_value",
+          "start_line": 2288,
+          "end_line": 2337
+        }
+      ]
+    },
+    {
+      "id": "click-07",
+      "split": "test",
+      "question": "整数范围下限是 3 且不包含端点，clamp=True 时输入 2 为什么被截到 4 而不是 3？请定位越界判断与整数开放端点修正两处实现。",
+      "files": [
+        "src/click/types.py"
+      ],
+      "symbols": [
+        "_NumberRangeBase.convert",
+        "IntRange._clamp"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "越界检测在继承的 _NumberRangeBase.convert，min_open 时用 <=；clamp 真且低于下限则调用 self._clamp(min,1,min_open)。IntRange._clamp 对开放端点返回 bound+dir，即4。不存在独立 IntRange.convert 的AST定义。",
+      "gold_evidence": [
+        {
+          "path": "src/click/types.py",
+          "symbol": "_NumberRangeBase.convert",
+          "start_line": 516,
+          "end_line": 545
+        },
+        {
+          "path": "src/click/types.py",
+          "symbol": "IntRange._clamp",
+          "start_line": 601,
+          "end_line": 607
+        }
+      ]
+    },
+    {
+      "id": "click-08",
+      "split": "test",
+      "question": "Path.convert 设置 exists=False 时，传入不存在的路径为什么会跳过后续 readable、writable 检查？如果 resolve_path=True，返回前是否已经尝试把路径转为真实路径？",
+      "files": [
+        "src/click/types.py"
+      ],
+      "symbols": [
+        "Path.convert"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "symbol-guided",
+      "exposes_target_symbol": true,
+      "annotation_notes": "非允许的 '-' 特例中，先根据 resolve_path 执行 os.path.realpath，再 os.stat；OSError 且 not exists 时直接 return coerce_path_result(rv)，因此不走后面的文件类型与 os.access 检查。题目描述本实现对stat失败的分支，不断言任意操作系统错误都仅由文件缺失造成。",
+      "gold_evidence": [
+        {
+          "path": "src/click/types.py",
+          "symbol": "Path.convert",
+          "start_line": 924,
+          "end_line": 995
+        }
+      ]
+    },
+    {
+      "id": "click-09",
+      "split": "test",
+      "question": "文件参数默认 lazy 未显式设置时，为何普通写入模式返回延迟打开的文件，而 '-' 不启用这种延迟？有命令上下文时，关闭或刷新动作在哪里登记？",
+      "files": [
+        "src/click/types.py"
+      ],
+      "symbols": [
+        "File.resolve_lazy_flag",
+        "File.convert"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "resolve_lazy_flag 优先尊重显式 lazy；否则 '-' 返回False，mode含w返回True。convert 的lazy分支创建LazyFile并登记close_intelligently，非lazy分支通过open_stream的should_close选择登记close或flush。只描述登记逻辑，没有实际打开或执行导入仓库代码。",
+      "gold_evidence": [
+        {
+          "path": "src/click/types.py",
+          "symbol": "File.resolve_lazy_flag",
+          "start_line": 762,
+          "end_line": 769
+        },
+        {
+          "path": "src/click/types.py",
+          "symbol": "File.convert",
+          "start_line": 771,
+          "end_line": 812
+        }
+      ]
+    },
+    {
+      "id": "click-10",
+      "split": "test",
+      "question": "一个回调函数上叠了多个选项装饰器，最终命令对象为什么会反向整理收集到的参数？未显式命名时，函数名 download_file_cmd 又如何变为默认命令名？",
+      "files": [
+        "src/click/decorators.py"
+      ],
+      "symbols": [
+        "command"
+      ],
+      "source": "https://github.com/pallets/click",
+      "ref": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "question_style": "behavioral",
+      "exposes_target_symbol": false,
+      "annotation_notes": "实际 command 实现中的decorator读取f.__click_params__并按reversed扩展params；默认名先lower并把下划线换为连字符，再去除command/cmd/group/grp后缀，因此示例得到download-file。选项装饰器如何存储列表不作为该题的必需定位；同名overload声明不是答案实现。",
+      "gold_evidence": [
+        {
+          "path": "src/click/decorators.py",
+          "symbol": "command",
+          "start_line": 168,
+          "end_line": 255
+        }
+      ]
+    }
+  ]
+}

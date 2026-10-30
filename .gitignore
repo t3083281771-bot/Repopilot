@@ -1,0 +1,25 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime data
+runtime/
+*.log
+
+# Node.js / Frontend
+node_modules/
+apps/web/dist/
+
+# IDE / OS
+.DS_Store
+Thumbs.db

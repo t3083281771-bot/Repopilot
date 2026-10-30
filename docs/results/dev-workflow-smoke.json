@@ -1,0 +1,958 @@
+{
+  "name": "public-python-code-localization-v1",
+  "kind": "public-code-qa",
+  "created_at": "2026-10-28T14:32:46.656058+00:00",
+  "split": "dev",
+  "case_count": 6,
+  "dataset_sha256": "0af37519e55435c73e52e0ab8f88a7bf8021200569442cb8ad90966b586c76b8",
+  "project_version": "0.1.0",
+  "environment": "3.12.14",
+  "provider": "demo",
+  "model": "deterministic-demo",
+  "embedding_provider": "hash",
+  "embedding_model": "hash-v1-384",
+  "embedding_profile": "hash:hash-v1-384",
+  "provenance": "Author-constructed code-localization questions, drafted with AI assistance and individually checked against imported fixed-version source, AST definitions and indexed symbols. These are code-understanding questions, not public GitHub Issues, reproduced defects, patches or repair-success evaluations. There was no independent human adjudication or inter-annotator study. All repositories also appear in dev, so test results do not establish repository-level generalization; source-aware question construction and model pretraining contamination may bias results.",
+  "summaries": [
+    {
+      "strategy": "bm25",
+      "cases": 6,
+      "file_hit_at_5": 0.8333,
+      "file_recall_at_5": 0.8333,
+      "symbol_hit_at_5": 0.5,
+      "p50_ms": 349.272,
+      "p95_ms": 418.723,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    },
+    {
+      "strategy": "vector",
+      "cases": 6,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.5,
+      "p50_ms": 460.464,
+      "p95_ms": 641.719,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    },
+    {
+      "strategy": "hybrid",
+      "cases": 6,
+      "file_hit_at_5": 0.8333,
+      "file_recall_at_5": 0.8333,
+      "symbol_hit_at_5": 0.6667,
+      "p50_ms": 602.759,
+      "p95_ms": 727.093,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    },
+    {
+      "strategy": "hybrid_rerank",
+      "cases": 6,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.6667,
+      "p50_ms": 642.812,
+      "p95_ms": 744.268,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    },
+    {
+      "strategy": "workflow_single",
+      "cases": 6,
+      "file_hit_at_5": 0.8333,
+      "file_recall_at_5": 0.8333,
+      "symbol_hit_at_5": null,
+      "p50_ms": 694.026,
+      "p95_ms": 748.421,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    },
+    {
+      "strategy": "workflow_agent",
+      "cases": 6,
+      "file_hit_at_5": 0.8333,
+      "file_recall_at_5": 0.8333,
+      "symbol_hit_at_5": null,
+      "p50_ms": 870.948,
+      "p95_ms": 966.865,
+      "prompt_tokens": 0,
+      "completion_tokens": 0
+    }
+  ],
+  "results": [
+    {
+      "case_id": "requests-01",
+      "strategy": "bm25",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 266.258,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_requests.py",
+        "src/requests/models.py",
+        "tests/conftest.py",
+        "src/requests/sessions.py",
+        "tests/test_utils.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_requests.py:test_prepared_copy",
+        "tests/test_requests.py:test_json_encodes_as_bytes",
+        "tests/test_requests.py:TestRequests.test_params_bytes_are_encoded",
+        "tests/test_requests.py:test_proxy_env_vars_override_default",
+        "src/requests/models.py:PreparedRequest.prepare"
+      ]
+    },
+    {
+      "case_id": "requests-01",
+      "strategy": "vector",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 355.484,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_requests.py",
+        "tests/test_utils.py",
+        "src/requests/adapters.py",
+        "src/requests/models.py",
+        "src/requests/sessions.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_requests.py:TestRequests.test_params_are_added_before_fragment",
+        "tests/test_utils.py:test_urldefragauth",
+        "tests/test_requests.py:TestRequests.test_whitespaces_are_removed_from_url",
+        "tests/test_requests.py:test_prepared_copy",
+        "tests/test_requests.py:TestPreparingURLs.test_preparing_bad_url"
+      ]
+    },
+    {
+      "case_id": "requests-01",
+      "strategy": "hybrid",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 460.463,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/requests/models.py",
+        "src/requests/adapters.py",
+        "tests/conftest.py",
+        "tests/test_requests.py",
+        "src/requests/sessions.py"
+      ],
+      "ranked_symbols": [
+        "src/requests/models.py:PreparedRequest.prepare",
+        "src/requests/models.py:Request.prepare",
+        "src/requests/models.py:PreparedRequest.prepare_auth",
+        "src/requests/models.py:PreparedRequest.prepare_url",
+        "src/requests/adapters.py:HTTPAdapter.request_url"
+      ]
+    },
+    {
+      "case_id": "requests-01",
+      "strategy": "hybrid_rerank",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 507.694,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/requests/models.py",
+        "tests/test_requests.py",
+        "src/requests/adapters.py",
+        "src/requests/sessions.py",
+        "tests/conftest.py"
+      ],
+      "ranked_symbols": [
+        "src/requests/models.py:PreparedRequest.prepare_url",
+        "src/requests/models.py:PreparedRequest.prepare",
+        "src/requests/models.py:PreparedRequest.prepare_auth",
+        "src/requests/models.py:Request.prepare",
+        "tests/test_requests.py:TestRequests.test_params_bytes_are_encoded"
+      ]
+    },
+    {
+      "case_id": "requests-01",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/requests/models.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 609.898,
+      "node_elapsed_ms": 569.96,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "requests-01",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/requests/models.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 789.005,
+      "node_elapsed_ms": 739.37,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "bm25",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 277.226,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/requests/sessions.py",
+        "src/requests/cookies.py",
+        "src/requests/models.py",
+        "tests/test_requests.py",
+        "src/requests/adapters.py"
+      ],
+      "ranked_symbols": [
+        "src/requests/sessions.py:SessionRedirectMixin.resolve_redirects",
+        "src/requests/cookies.py:MockRequest.get_new_headers",
+        "src/requests/models.py:Request.__init__",
+        "src/requests/cookies.py:MockResponse.__init__",
+        "src/requests/sessions.py:Session.prepare_request"
+      ]
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "vector",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 334.167,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "src/requests/cookies.py",
+        "src/requests/models.py",
+        "tests/test_requests.py",
+        "src/requests/sessions.py",
+        "HISTORY.md"
+      ],
+      "ranked_symbols": [
+        "src/requests/cookies.py:MockRequest.get_new_headers",
+        "src/requests/cookies.py:MockResponse.__init__",
+        "src/requests/cookies.py:MockResponse.info",
+        "src/requests/cookies.py:MockResponse.getheaders",
+        "src/requests/cookies.py:MockRequest.has_header"
+      ]
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "hybrid",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 455.856,
+      "file_hit_at_5": 0.0,
+      "file_recall_at_5": 0.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "src/requests/cookies.py",
+        "src/requests/models.py",
+        "tests/test_requests.py"
+      ],
+      "ranked_symbols": [
+        "src/requests/cookies.py:MockRequest.get_new_headers",
+        "src/requests/cookies.py:MockResponse.__init__",
+        "src/requests/cookies.py:MockRequest.has_header",
+        "src/requests/cookies.py:MockRequest.get_header",
+        "src/requests/cookies.py:extract_cookies_to_jar"
+      ]
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "hybrid_rerank",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 570.785,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "src/requests/cookies.py",
+        "src/requests/models.py",
+        "tests/test_requests.py",
+        "src/requests/sessions.py"
+      ],
+      "ranked_symbols": [
+        "src/requests/cookies.py:MockRequest.get_new_headers",
+        "src/requests/cookies.py:MockResponse.__init__",
+        "src/requests/cookies.py:MockRequest.has_header",
+        "src/requests/cookies.py:MockRequest.get_header",
+        "src/requests/cookies.py:extract_cookies_to_jar"
+      ]
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 0.0,
+      "file_recall_at_5": 0.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/requests/cookies.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 586.939,
+      "node_elapsed_ms": 554.54,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "requests-03",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 0.0,
+      "file_recall_at_5": 0.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/requests/cookies.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 702.435,
+      "node_elapsed_ms": 659.25,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "bm25",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 414.026,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/flask/app.py",
+        "tests/test_basic.py",
+        "src/flask/helpers.py",
+        "tests/test_helpers.py",
+        "tests/test_views.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/app.py:Flask.make_response",
+        "tests/test_basic.py:test_make_response_with_response_instance",
+        "tests/test_basic.py:test_make_response",
+        "src/flask/helpers.py:make_response",
+        "tests/test_helpers.py:TestHelpers.test_make_response"
+      ]
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "vector",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 473.32,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "tests/test_basic.py",
+        "src/flask/app.py",
+        "tests/test_helpers.py",
+        "src/flask/sansio/app.py",
+        "src/flask/helpers.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_basic.py:test_make_response_with_response_instance",
+        "src/flask/app.py:Flask.make_response",
+        "tests/test_helpers.py:TestHelpers.test_make_response",
+        "tests/test_basic.py:test_make_response",
+        "src/flask/app.py:_make_timedelta"
+      ]
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "hybrid",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 595.898,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/flask/app.py",
+        "tests/test_basic.py",
+        "src/flask/helpers.py",
+        "tests/test_helpers.py",
+        "src/flask/sansio/app.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/app.py:Flask.make_response",
+        "tests/test_basic.py:test_make_response_with_response_instance",
+        "tests/test_basic.py:test_make_response",
+        "src/flask/helpers.py:make_response",
+        "tests/test_helpers.py:TestHelpers.test_make_response"
+      ]
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "hybrid_rerank",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 640.414,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/flask/app.py",
+        "tests/test_basic.py",
+        "src/flask/helpers.py",
+        "tests/test_helpers.py",
+        "src/flask/wrappers.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/app.py:Flask.make_response",
+        "tests/test_basic.py:test_make_response_with_response_instance",
+        "tests/test_basic.py:test_make_response",
+        "src/flask/helpers.py:make_response",
+        "tests/test_helpers.py:TestHelpers.test_make_response"
+      ]
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/flask/app.py",
+        "tests/test_basic.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 697.091,
+      "node_elapsed_ms": 662.52,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "flask-01",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/flask/app.py",
+        "tests/test_basic.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 865.856,
+      "node_elapsed_ms": 822.18,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "bm25",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 337.041,
+      "file_hit_at_5": 0.0,
+      "file_recall_at_5": 0.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "src/flask/sansio/blueprints.py",
+        "tests/test_basic.py",
+        "src/flask/sansio/scaffold.py",
+        "tests/type_check/typing_app_decorators.py",
+        "tests/test_blueprints.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/sansio/blueprints.py:Blueprint.before_app_request",
+        "tests/test_basic.py:test_request_preprocessing_early_return",
+        "src/flask/sansio/scaffold.py:Scaffold.before_request",
+        "tests/test_basic.py:test_request_processing",
+        "tests/type_check/typing_app_decorators.py:before_sync"
+      ]
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "vector",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 447.609,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "tests/test_basic.py",
+        "tests/type_check/typing_app_decorators.py",
+        "src/flask/sansio/blueprints.py",
+        "src/flask/app.py",
+        "tests/test_templating.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_basic.py:test_request_processing",
+        "tests/type_check/typing_app_decorators.py:before_sync",
+        "src/flask/sansio/blueprints.py:Blueprint.before_app_request",
+        "src/flask/app.py:Flask.preprocess_request",
+        "tests/test_templating.py:test_add_template_test"
+      ]
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "hybrid",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 609.619,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/flask/sansio/blueprints.py",
+        "src/flask/sansio/scaffold.py",
+        "src/flask/app.py",
+        "tests/test_basic.py",
+        "tests/test_async.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/sansio/blueprints.py:Blueprint.before_app_request",
+        "src/flask/sansio/scaffold.py:Scaffold.before_request",
+        "src/flask/app.py:Flask.preprocess_request",
+        "tests/test_basic.py:test_before_after_request_order",
+        "tests/test_async.py:test_async_before_after_request"
+      ]
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "hybrid_rerank",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 645.209,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/flask/sansio/blueprints.py",
+        "src/flask/sansio/scaffold.py",
+        "src/flask/app.py",
+        "tests/test_basic.py",
+        "tests/test_async.py"
+      ],
+      "ranked_symbols": [
+        "src/flask/sansio/blueprints.py:Blueprint.before_app_request",
+        "src/flask/sansio/scaffold.py:Scaffold.before_request",
+        "src/flask/app.py:Flask.preprocess_request",
+        "tests/test_basic.py:test_before_after_request_order",
+        "tests/test_async.py:test_async_before_after_request"
+      ]
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/flask/sansio/blueprints.py",
+        "src/flask/sansio/scaffold.py",
+        "src/flask/app.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 690.961,
+      "node_elapsed_ms": 660.83,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "flask-03",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/flask/sansio/blueprints.py",
+        "src/flask/sansio/scaffold.py",
+        "src/flask/app.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 876.041,
+      "node_elapsed_ms": 833.8,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "bm25",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 361.502,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/click/core.py",
+        "tests/test_context.py",
+        "tests/test_defaults.py",
+        "tests/test_options.py",
+        "tests/test_commands.py"
+      ],
+      "ranked_symbols": [
+        "src/click/core.py:Parameter.consume_value",
+        "src/click/core.py:Context.lookup_default",
+        "src/click/core.py:Option.consume_value",
+        "src/click/core.py:Parameter.handle_parse_result",
+        "src/click/core.py:ParameterSource"
+      ]
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "vector",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 504.114,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/click/core.py",
+        "tests/test_utils.py",
+        "src/click/types.py",
+        "examples/imagepipe/imagepipe.py",
+        "examples/validation/validation.py"
+      ],
+      "ranked_symbols": [
+        "src/click/core.py:Parameter.consume_value",
+        "src/click/core.py:Context.lookup_default",
+        "tests/test_utils.py:test_prompt_cast_default",
+        "src/click/core.py:Option.consume_value",
+        "src/click/types.py:UUIDParameterType.convert"
+      ]
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "hybrid",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 671.37,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/click/core.py",
+        "tests/test_options.py",
+        "src/click/types.py",
+        "tests/test_context.py",
+        "tests/test_defaults.py"
+      ],
+      "ranked_symbols": [
+        "src/click/core.py:Parameter.consume_value",
+        "src/click/core.py:Option.consume_value",
+        "src/click/core.py:Context.lookup_default",
+        "src/click/core.py:Parameter.get_default",
+        "src/click/core.py:Parameter.process_value"
+      ]
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "hybrid_rerank",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 761.738,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 1.0,
+      "ranked_files": [
+        "src/click/core.py",
+        "tests/test_options.py",
+        "tests/test_context.py",
+        "src/click/types.py",
+        "tests/test_defaults.py"
+      ],
+      "ranked_symbols": [
+        "src/click/core.py:Parameter.consume_value",
+        "src/click/core.py:Option.consume_value",
+        "src/click/core.py:Context.lookup_default",
+        "src/click/core.py:Parameter.get_default",
+        "src/click/core.py:Parameter.handle_parse_result"
+      ]
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/click/core.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 762.217,
+      "node_elapsed_ms": 732.64,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "click-01",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "src/click/core.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 982.333,
+      "node_elapsed_ms": 941.65,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "bm25",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 420.288,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "src/click/core.py",
+        "examples/imagepipe/imagepipe.py",
+        "tests/test_commands.py",
+        "tests/test_context.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_chain.py:test_no_command_result_callback",
+        "src/click/core.py:Group.result_callback",
+        "src/click/core.py:Group.__init__",
+        "examples/imagepipe/imagepipe.py:process_commands",
+        "tests/test_chain.py:test_pipeline"
+      ]
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "vector",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 687.587,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "tests/test_context.py",
+        "tests/test_options.py",
+        "tests/test_commands.py",
+        "src/click/core.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_chain.py:test_no_command_result_callback",
+        "tests/test_context.py:test_multi_enter",
+        "tests/test_options.py:test_multiple_required",
+        "tests/test_commands.py:test_object_propagation",
+        "src/click/core.py:Group.parse_args"
+      ]
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "hybrid",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 745.668,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "src/click/core.py",
+        "tests/test_options.py",
+        "tests/test_context.py",
+        "tests/test_commands.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_chain.py:test_no_command_result_callback",
+        "src/click/core.py:Group.result_callback",
+        "tests/test_chain.py:test_args_and_chain",
+        "tests/test_options.py:test_callback_validates_prompt",
+        "src/click/core.py:_check_nested_chain"
+      ]
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "hybrid_rerank",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 691.858,
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": 0.0,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "src/click/core.py",
+        "tests/test_options.py",
+        "tests/test_context.py",
+        "tests/test_commands.py"
+      ],
+      "ranked_symbols": [
+        "tests/test_chain.py:test_no_command_result_callback",
+        "src/click/core.py:Group.result_callback",
+        "tests/test_chain.py:test_args_and_chain",
+        "tests/test_options.py:test_callback_validates_prompt",
+        "src/click/core.py:Group.__init__"
+      ]
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "workflow_single",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "src/click/core.py"
+      ],
+      "rounds": 1,
+      "tool_calls": 1,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 707.034,
+      "node_elapsed_ms": 669.62,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    },
+    {
+      "case_id": "click-03",
+      "strategy": "workflow_agent",
+      "file_hit_at_5": 1.0,
+      "file_recall_at_5": 1.0,
+      "symbol_hit_at_5": null,
+      "ranked_files": [
+        "tests/test_chain.py",
+        "src/click/core.py"
+      ],
+      "rounds": 2,
+      "tool_calls": 2,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "provider_calls": 0,
+      "failed_provider_calls": 0,
+      "estimated_calls": 0,
+      "usage_estimated": false,
+      "usage_note": "提供方返回的 usage 累计；演示模式无模型费用。",
+      "elapsed_ms": 920.462,
+      "node_elapsed_ms": 878.45,
+      "provider": "demo",
+      "model": "deterministic-demo",
+      "embedding_provider": "hash"
+    }
+  ],
+  "indexing": [
+    {
+      "source": "https://github.com/psf/requests",
+      "revision": "b25c87d7cb8d6a18a37fa12442b5f883f9e41741",
+      "elapsed_ms": 0.0,
+      "reused": true
+    },
+    {
+      "source": "https://github.com/pallets/flask",
+      "revision": "2c1b30d0503cfb064f1cb252e6614a06915a362a",
+      "elapsed_ms": 0.0,
+      "reused": true
+    },
+    {
+      "source": "https://github.com/pallets/click",
+      "revision": "fd183b2ced1cb5857784fe7fb22f4982f671f098",
+      "elapsed_ms": 0.0,
+      "reused": true
+    }
+  ],
+  "notes": [
+    "This measures localization, not issue resolution or patch correctness.",
+    "hash embeddings and hybrid_rerank are lexical baselines; no semantic/reranker-model claim.",
+    "Indexing latency is separate; retrieval includes query embedding and excludes answer generation.",
+    "No dollar cost estimated without provider pricing; usage tokens are reported when available.",
+    "Small public benchmark subsets can be present in model training; contamination cannot be excluded."
+  ]
+}
