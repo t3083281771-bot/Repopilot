@@ -1,0 +1,3 @@
+interface:
+  display_name: "代码库渐进学习"
+  short_description: "从整体架构追踪真实请求与数据流，按学习节奏讲解代码并记录实践与复盘"
